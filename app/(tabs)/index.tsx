@@ -17,9 +17,9 @@ export default function Index() {
     query: ''
   }))
     // Debug logs
-    console.log("Loading:", moviesLoading);
-    console.log("Error:", moviesError);
-    console.log("Data:", movies);
+    // console.log("Loading:", moviesLoading);
+    // console.log("Error:", moviesError);
+    // console.log("Data:", movies);
   
   return (
     <View className="flex-1 bg-primary">
