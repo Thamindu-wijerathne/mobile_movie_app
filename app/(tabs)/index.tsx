@@ -27,12 +27,35 @@ export default function Index() {
     }));
 
     const {
-        data: genreMovie,
-        loading: genreLoading,
-        error: genreError
-      } = useFetch(() => fetchGenre('14'));
-
-    console.log(genreMovie)
+        data: adventureMovies,
+        loading: adventureLoading,
+        error: adventureError
+      } = useFetch(() => fetchGenre('12'));
+      
+      const {
+        data: actionMovies,
+        loading: actionLoading,
+        error: actionError
+      } = useFetch(() => fetchGenre('28'));
+      
+      const {
+        data: scifiMovies,
+        loading: scifiLoading,
+        error: scifiError
+      } = useFetch(() => fetchGenre('878'));
+      
+      const {
+        data: romanceMovies,
+        loading: romanceLoading,
+        error: romanceError
+      } = useFetch(() => fetchGenre('10749'));
+      
+      const {
+        data: animationMovies,
+        loading: animationLoading,
+        error: animationError
+      } = useFetch(() => fetchGenre('16'));
+      
 
 return (
     <View className="flex-1 bg-primary">
@@ -42,13 +65,13 @@ return (
         }}>
             <Image source={icons.logo} className="w-12 h-10 mt-20 mb-5  mx-auto" />
 
-            {moviesLoading || trendingLoading ? (
+            {moviesLoading || trendingLoading || adventureLoading || actionLoading || scifiLoading || romanceLoading || animationLoading || animationError? (
             <ActivityIndicator
                 size="large"
                 color="#0000ff"
                 className="mt-10 self-center"
             /> 
-            ): moviesError || trendingError ? (
+            ): moviesError || trendingError || adventureError || actionError || scifiError || romanceError ? (
                 <Text>Error: {moviesError?.message || trendingError?.message}</Text>
             ): (
             <View className="flex-1 mt-5">
@@ -110,7 +133,83 @@ return (
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     className="mb-4 mt-3"
-                    data={genreMovie}
+                    data={adventureMovies}
+                    contentContainerStyle={{
+                        gap: 20,
+                    }}
+                    renderItem={({ item }) => (
+                        <GenreMovieCard 
+                        {... item}
+                        />
+                    )}
+                />
+            </>
+            <>
+                <Text className="text-lg text-white font-bold">
+                    ActionMovies
+                </Text>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mb-4 mt-3"
+                    data={actionMovies}
+                    contentContainerStyle={{
+                        gap: 20,
+                    }}
+                    renderItem={({ item }) => (
+                        <GenreMovieCard 
+                        {... item}
+                        />
+                    )}
+                />
+            </>
+            <>
+                <Text className="text-lg text-white font-bold">
+                    scifiMovies
+                </Text>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mb-4 mt-3"
+                    data={scifiMovies}
+                    contentContainerStyle={{
+                        gap: 20,
+                    }}
+                    renderItem={({ item }) => (
+                        <GenreMovieCard 
+                        {... item}
+                        />
+                    )}
+                />
+            </>
+            <>
+                <Text className="text-lg text-white font-bold">
+                romanceMovies
+                </Text>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mb-4 mt-3"
+                    data={romanceMovies}
+                    contentContainerStyle={{
+                        gap: 20,
+                    }}
+                    renderItem={({ item }) => (
+                        <GenreMovieCard 
+                        {... item}
+                        />
+                    )}
+                />
+            </>
+            <>
+                <Text className="text-lg text-white font-bold">
+                animationMovies
+                </Text>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    className="mb-4 mt-3"
+                    data={animationMovies}
                     contentContainerStyle={{
                         gap: 20,
                     }}
