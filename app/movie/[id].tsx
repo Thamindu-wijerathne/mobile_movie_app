@@ -1,5 +1,5 @@
 import { icons } from "@/constants/icons";
-import { fetchMovieDetails } from "@/services/api";
+import { fetchMovieDetails, fetchMovieVideo } from "@/services/api";
 import useFetch from "@/services/usefetch";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useState } from 'react';
@@ -15,8 +15,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import YoutubePlayer from "react-native-youtube-iframe";
 interface MovieInfoProps {
-label: string;
-value?: string | number | null;
+    label: string;
+    value?: string | number | null;
 }
 
 const MovieInfo = ({ label, value }: MovieInfoProps) => (
@@ -49,6 +49,12 @@ const { id } = useLocalSearchParams();
 const { data: movie, loading } = useFetch(() =>
     fetchMovieDetails(id as string)
 );
+
+const { data:VideoDetail } = useFetch(() => 
+    fetchMovieVideo(id as string)
+) 
+
+// console.log(VideoDetail);
 
 
 if (loading)
@@ -89,7 +95,7 @@ return (
                     <YoutubePlayer
                         height={300}
                         play={playing}
-                        videoId={"iee2TATGMyI"}
+                        videoId={VideoDetail}
                         onChangeState={onStateChange}
                     />
                 </View>
