@@ -55,6 +55,30 @@ export default function Index() {
         loading: animationLoading,
         error: animationError
       } = useFetch(() => fetchGenre('16'));
+
+      const GenreSection = ({ title, data }: { title: string; data: Movie[] | null }) => {
+        // if (!data || data.length === 0){ return null;}
+      
+        return (
+          <>
+            <Text className="text-lg text-white font-bold mt-5 mb-3">{title}</Text>
+            {data && data.length > 0 ? (
+            <FlatList
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              className="mb-4 mt-3"
+              data={data}
+              contentContainerStyle={{ gap: 20 }}
+              renderItem={({ item }) => <GenreMovieCard {...item} />}
+            />
+            ) : (
+                <Text className="text-white italic mb-4">No movies found.</Text>
+            )}
+          </>
+        );
+      };
+      
+      
       
 
 return (
@@ -125,101 +149,12 @@ return (
                 />
             </>
 
-            <>
-                <Text className="text-lg text-white font-bold">
-                    Adventure
-                </Text>
-                <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    className="mb-4 mt-3"
-                    data={adventureMovies}
-                    contentContainerStyle={{
-                        gap: 20,
-                    }}
-                    renderItem={({ item }) => (
-                        <GenreMovieCard 
-                        {... item}
-                        />
-                    )}
-                />
-            </>
-            <>
-                <Text className="text-lg text-white font-bold">
-                    ActionMovies
-                </Text>
-                <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    className="mb-4 mt-3"
-                    data={actionMovies}
-                    contentContainerStyle={{
-                        gap: 20,
-                    }}
-                    renderItem={({ item }) => (
-                        <GenreMovieCard 
-                        {... item}
-                        />
-                    )}
-                />
-            </>
-            <>
-                <Text className="text-lg text-white font-bold">
-                    scifiMovies
-                </Text>
-                <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    className="mb-4 mt-3"
-                    data={scifiMovies}
-                    contentContainerStyle={{
-                        gap: 20,
-                    }}
-                    renderItem={({ item }) => (
-                        <GenreMovieCard 
-                        {... item}
-                        />
-                    )}
-                />
-            </>
-            <>
-                <Text className="text-lg text-white font-bold">
-                romanceMovies
-                </Text>
-                <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    className="mb-4 mt-3"
-                    data={romanceMovies}
-                    contentContainerStyle={{
-                        gap: 20,
-                    }}
-                    renderItem={({ item }) => (
-                        <GenreMovieCard 
-                        {... item}
-                        />
-                    )}
-                />
-            </>
-            <>
-                <Text className="text-lg text-white font-bold">
-                animationMovies
-                </Text>
-                <FlatList
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    className="mb-4 mt-3"
-                    data={animationMovies}
-                    contentContainerStyle={{
-                        gap: 20,
-                    }}
-                    renderItem={({ item }) => (
-                        <GenreMovieCard 
-                        {... item}
-                        />
-                    )}
-                />
-            </>
+            <GenreSection title="Adventure" data={adventureMovies} />
+            <GenreSection title="Action" data={actionMovies} />
+            <GenreSection title="Sci-Fi" data={scifiMovies} />
+            <GenreSection title="Romance" data={romanceMovies} />
+            <GenreSection title="Animation" data={animationMovies} />
+
 
             </View>
         )}
