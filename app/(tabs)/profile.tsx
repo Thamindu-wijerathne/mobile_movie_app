@@ -1,12 +1,22 @@
 import { images } from "@/constants/images";
-import { checkUserLoggedIn } from "@/services/appwrite";
+import { checkUserLoggedIn, loginUser } from "@/services/appwrite";
 import { useEffect, useState } from "react";
 import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+ 
 
 const Profile = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
     const [isSignUp, setIsSignUp] = useState(false); // Toggle between login and signup
+
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+
+
+    console.log(email , password);
 
     useEffect(() => {
         const checkLoginStatus = async () => {
@@ -20,6 +30,26 @@ const Profile = () => {
     const toggleSignUp = () => {
         setIsSignUp(!isSignUp);
     };
+
+    // login function 
+    const handleLogin = async () => {
+        const trimmedEmail = email.trim();
+        const trimmedPassword = password.trim();
+    
+        if (!trimmedEmail || !trimmedPassword) {
+            console.error("Email and password are required.");
+            return;
+        }
+    
+        try {
+            const session = await loginUser(trimmedEmail, trimmedPassword);
+            console.log("Logged in:", session);
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.error("Login error:", error);
+        }
+    };
+    
 
     return (
         <SafeAreaView className="bg-primary flex-1">
@@ -73,6 +103,8 @@ const Profile = () => {
                                 <>
                                     <Text className="text-gray-300 text-sm mb-1">Email</Text>
                                     <TextInput
+                                        value={email}
+                                        onChangeText={(text) => setEmail(text)}
                                         placeholder="Enter your email"
                                         placeholderTextColor="#888"
                                         className="bg-[#151a2e] text-white rounded-md px-4 py-3 mb-4 border-b border-gray-600"
@@ -84,12 +116,17 @@ const Profile = () => {
                                         </TouchableOpacity>
                                     </View>
                                     <TextInput
+                                        value={password}
+                                        onChangeText={(text) => setPassword(text)}
                                         placeholder="Enter your password"
                                         placeholderTextColor="#888"
                                         secureTextEntry
                                         className="bg-[#151a2e] text-white rounded-md px-4 py-3 mb-6 border-b border-gray-600"
                                     />
-                                    <TouchableOpacity className="bg-[#2e3c56] rounded-md py-3 mb-4 items-center">
+                                    <TouchableOpacity 
+                                        className="bg-[#2e3c56] rounded-md py-3 mb-4 items-center"
+                                        onPress={handleLogin}
+                                    >
                                         <Text className="text-white font-medium">Log In</Text>
                                     </TouchableOpacity>
                                 </>

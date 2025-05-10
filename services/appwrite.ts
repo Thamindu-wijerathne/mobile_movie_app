@@ -3,12 +3,14 @@ import { Account, Client, Databases, ID, Query } from "appwrite";
 
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
+const USER_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID_USER;
 
 const client = new Client()
-    .setEndpoint("https://cloud.appwrite.io/v1")
-    .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!)
+    .setEndpoint('https://syd.cloud.appwrite.io/v1')
+    .setProject('681f060f0012d516dc73');
 
 const database = new Databases(client);
+const account  = new Account(client);
 
 export const updateSearchCount = async (query: string, movie: Movie) => {
     try {
@@ -55,9 +57,6 @@ try {
 }
 }
 
-// Authentication
-const account  = new Account(client);
-
 export const checkUserLoggedIn = async(): Promise<boolean> => {
 try {
     await account.get();
@@ -67,3 +66,43 @@ try {
     return false;
 }
 }
+
+
+export const createUser = async (email: string, password: string, name: string) => {
+    try {
+      const user = await account.create(ID.unique(), email, password, name);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+export const loginUser = async (email: string, password: string) => {
+    try {
+        const session = await account.createEmailPasswordSession(email, password);
+        console.log("Login successful:", session);
+        return session;
+    } catch (error) {
+        console.error("Login failed:", error);
+        throw error;
+    }
+};
+
+// loginUser('thamindu12ku@gmail.com', 'Thamindu');
+
+export const logoutUser = async (sessionID: string) => {
+    try {
+        const result = await account.deleteSession(sessionID);
+        console.log("Log out successfull", result);
+        return result;
+
+    } catch (error) {
+        console.error('LogOut failed', error);
+        throw error;
+    }
+
+};
+
+
+// logoutUser('681f29f4ec84e4627e37');
