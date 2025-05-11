@@ -1,6 +1,7 @@
 // track the searches made by a user
 import { Account, Client, Databases, ID, Query } from "appwrite";
 
+
 const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID!;
 const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID!;
 const USER_COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_COLLECTION_ID_USER;
@@ -58,14 +59,24 @@ try {
 }
 
 export const checkUserLoggedIn = async(): Promise<boolean> => {
-try {
-    await account.get();
-    return true;
-} catch(error) {
-    console.log('User log check error :', error);
-    return false;
-}
-}
+    try {
+        await account.get();
+        return true;
+    } catch(error) {
+        console.log('User log check error :', error);
+        return false;
+    }
+} // make sure this import exists
+
+export const loggedUserDetail = async ()=> {
+  try {
+    const detail = await account.get();
+    return detail;
+  } catch (error) {
+    console.log('Failed to get user details', error);
+    return null;
+  }
+};
 
 
 export const createUser = async (email: string, password: string, name: string) => {
@@ -78,22 +89,22 @@ export const createUser = async (email: string, password: string, name: string) 
   };
 
 
-export const loginUser = async (email: string, password: string) => {
+  export const loginUser = async (email: string, password: string) => {
     try {
-        const session = await account.createEmailPasswordSession(email, password);
-        console.log("Login successful:", session);
-        return session;
+      const session = await account.createEmailPasswordSession(email, password);
+      return { session};
     } catch (error) {
-        console.error("Login failed:", error);
-        throw error;
+      console.error("Login failed:", error);
+      throw error;
     }
-};
+  };
+  
 
 // loginUser('thamindu12ku@gmail.com', 'Thamindu');
 
-export const logoutUser = async (sessionID: string) => {
+export const logoutUser = async () => {
     try {
-        const result = await account.deleteSession(sessionID);
+        const result = await account.deleteSession("current");
         console.log("Log out successfull", result);
         return result;
 
