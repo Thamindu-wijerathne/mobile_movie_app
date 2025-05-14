@@ -82,8 +82,10 @@ export const loggedUserDetail = async ()=> {
 export const createUser = async (email: string, password: string, name: string) => {
     try {
       const user = await account.create(ID.unique(), email, password, name);
+      console.log("Create account successfull", user);
       return user;
     } catch (error) {
+      console.error('Create account failed : ', error);
       throw error;
     }
   };
