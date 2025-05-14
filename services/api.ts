@@ -102,3 +102,6 @@ export const fetchMovieVideo = async (movieID: string) => {
     }
   };
 
+export const fetchSavedMovies = async(id: string) => {
+    console.log(id);
+}

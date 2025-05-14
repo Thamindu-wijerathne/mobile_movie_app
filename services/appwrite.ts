@@ -165,6 +165,6 @@ export const removeSavedMovie = async (movieIdToRemove: number) => {
 };
 
 // addSavedMovie(11);
-// removeSavedMovie(10);
+
 // getSavedMovies();
 // logoutUser('681f29f4ec84e4627e37');
