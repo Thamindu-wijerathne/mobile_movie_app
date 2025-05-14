@@ -1,10 +1,9 @@
 import MovieCard from "@/components/MovieCard";
 import { images } from "@/constants/images";
-import { fetchMovieDetails, fetchSavedMovies } from "@/services/api";
+import { fetchMovieDetails } from "@/services/api";
 import { getSavedMovies } from "@/services/appwrite";
-import useFetch from "@/services/usefetch";
 import { useEffect, useState } from "react";
-import { FlatList, Image, View } from "react-native";
+import { FlatList, Image, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Profile = () => {
@@ -28,22 +27,19 @@ const Profile = () => {
     
       fetchDetails();
     }, []);
-
-    const { 
-        data:movies, 
-        loading: moviesLoading, 
-        error: moviesError } = useFetch(() => fetchSavedMovies(id as string));
-
+    
     return (
     <SafeAreaView className="bg-primary flex-1">
         <Image source={images.bg} className="flex-1 absolute w-full z-0" resizeMode="cover" />
+        <ScrollView>
         <View className="flex justify-center items-center flex-1 flex-col gap-5">
+            <View className="my-20">
+                <Text className="text-white text-3xl"> Saved Movies</Text>
+            </View>
             <FlatList 
                 data={savedMovieDetails}
                 renderItem={({ item }) => (
-                    <MovieCard 
-                    {... item}
-                    />
+                    <MovieCard {... item}/>
                 )}
                 numColumns={3}
                 columnWrapperStyle={{
@@ -57,6 +53,7 @@ const Profile = () => {
             />
                 
         </View>
+        </ScrollView>
     </SafeAreaView>
   );
 };

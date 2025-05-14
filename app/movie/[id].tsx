@@ -86,6 +86,13 @@ const Details = () => {
     
         // Toggle the selectMovie state
         setMovieSelect((prev) => !prev);
+
+            // Re-fetch the saved movies to update the state after adding/removing
+            const fetchSaved = async () => {
+                const movies = await getSavedMovies();
+                setSavedMovies(movies);
+            };
+            fetchSaved();
     };
 
     useEffect(() => {
