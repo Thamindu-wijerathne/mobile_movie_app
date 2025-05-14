@@ -69,13 +69,13 @@ export const checkUserLoggedIn = async(): Promise<boolean> => {
 } // make sure this import exists
 
 export const loggedUserDetail = async ()=> {
-  try {
+try {
     const detail = await account.get();
     return detail;
-  } catch (error) {
+} catch (error) {
     console.log('Failed to get user details', error);
     return null;
-  }
+}
 };
 
 
@@ -88,19 +88,19 @@ export const createUser = async (email: string, password: string, name: string) 
       console.error('Create account failed : ', error);
       throw error;
     }
-  };
+};
 
 
-  export const loginUser = async (email: string, password: string) => {
+export const loginUser = async (email: string, password: string) => {
     try {
-      const session = await account.createEmailPasswordSession(email, password);
-      return { session};
+    const session = await account.createEmailPasswordSession(email, password);
+    return { session};
     } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
+    console.error("Login failed:", error);
+    throw error;
     }
-  };
-  
+};
+
 
 // loginUser('thamindu12ku@gmail.com', 'Thamindu');
 
@@ -118,4 +118,55 @@ export const logoutUser = async () => {
 };
 
 
+export const getSavedMovies = async () => {
+    try {
+        const result = await account.getPrefs()
+        console.log("user prefernce :", result.savedMovies);
+        return result.savedMovies;
+    } catch (error) {
+        console.error("user get preference :",error);
+        return ;
+    }
+}
+
+export const addSavedMovie = async (newMovieId: number) => {
+    try {
+      const user = await account.get();
+      const currentMovies: number[] = user.prefs?.savedMovies || [];
+  
+      // Avoid duplicates
+      if (currentMovies.includes(newMovieId)) return;
+  
+      const updatedMovies = [...currentMovies, newMovieId];
+      await account.updatePrefs({ savedMovies: updatedMovies });
+  
+      console.log("Movie added to saved list.");
+    } catch (error) {
+      console.error("Failed to add movie:", error);
+    }
+  };
+
+
+export const removeSavedMovie = async (movieIdToRemove: number) => {
+  try {
+    // Step 1: Get current preferences
+    const user = await account.get();
+    const currentMovies = user.prefs?.savedMovies || [];
+
+    // Step 2: Filter out the movie ID
+    const updatedMovies = currentMovies.filter((id: number) => id !== movieIdToRemove);
+
+    // Step 3: Update preferences
+    await account.updatePrefs({ savedMovies: updatedMovies });
+
+    console.log("Movie removed successfully");
+    return;
+  } catch (error) {
+    console.error("Error removing movie:", error);
+  }
+};
+
+// addSavedMovie(11);
+
+// getSavedMovies();
 // logoutUser('681f29f4ec84e4627e37');

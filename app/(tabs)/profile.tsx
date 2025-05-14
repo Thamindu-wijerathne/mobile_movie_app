@@ -112,38 +112,28 @@ const Profile = () => {
                     )}
                     {/* This when user is logged in */}
                     {isLoggedIn ? (
-                            <View>
-                                <Text className="text-white text-lg font-semibold">
+                            <View className="w-full">
+                                <Text className="text-white text-2xl font-bold mb-4 text-center">
                                 Welcome, {userData?.name}
-                            </Text>
-                                <View className="items-center relative mt-[20px]">
+                                </Text>
+                                <View className="items-center relative mt-[20px] mb-8">
                                     {/* Horizontal Line through the middle */}
-                                    <View className="absolute top-1/2 w-[110%] border-t border-white" />
+                                    <View className="absolute top-1/2 w-[110%] border-t border-white/30" />
 
                                     {/* Profile Picture */}
-                                    <Image
-                                        source={images.profilePic}
-                                        className="w-40 h-40 mr-[65%]"
-                                        resizeMode="cover"
-                                    />
+                                    <View className="bg-[#2e3c56] p-2 rounded-full border-4 border-[#3d4e6d]">
+                                    <Image source={images.profilePic} className="w-32 h-32 rounded-full" resizeMode="cover" />
+                                    </View>
                                 </View>
                                   {/* User Name */}
-                                <View className="flex-row items-center mb-4 px-2 mt-5">
-                                    <Image
-                                    source={icons.user}
-                                    className="w-5 h-5"
-                                    style={{ tintColor: 'white' }}
-                                    />
+                                <View className="flex-row items-center mb-4 px-4 py-3 bg-[#1c2339] rounded-xl">
+                                    <Image source={icons.user} className="w-6 h-6" style={{ tintColor: "#e0e0ff" }} />
                                     <Text className="text-white ml-4 text-base font-medium">{userData?.name}</Text>
                                 </View>
 
                                 {/* User Email */}
-                                <View className="flex-row items-center mb-6 px-2 mt-5">
-                                    <Image
-                                    source={icons.email}
-                                    className="w-5 h-5"
-                                    style={{ tintColor: 'white' }}
-                                    />
+                                <View className="flex-row items-center mb-8 px-4 py-3 bg-[#1c2339] rounded-xl">
+                                    <Image source={icons.email} className="w-6 h-6" style={{ tintColor: "#e0e0ff" }} />
                                     <Text className="text-white ml-4 text-base font-medium">{userData?.email}</Text>
                                 </View>
 
