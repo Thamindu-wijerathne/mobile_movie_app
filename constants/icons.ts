@@ -1,4 +1,6 @@
 import arrow from "@/assets/icons/arrow.png";
+import unmark from "@/assets/icons/check_circle.png";
+import mark from "@/assets/icons/check_circle_active.png";
 import email from "@/assets/icons/envelope-solid.png";
 import home from "@/assets/icons/home.png";
 import password from "@/assets/icons/lock-solid.png";
@@ -23,5 +25,7 @@ export const icons = {
   back,
   user,
   email,
-  password
+  password,
+  mark,
+  unmark
 };
