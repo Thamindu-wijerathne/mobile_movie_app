@@ -88,7 +88,10 @@ const Details = () => {
         setMovieSelect((prev) => !prev);
     };
 
-    // const isSaved = movies
+    useEffect(() => {
+        const isSaved = savedMovies.includes(Number(id));
+        setMovieSelect(isSaved);
+    }, [savedMovies, id]);
 
     console.log('Saved Movies:', savedMovies);
 
