@@ -1,11 +1,11 @@
 import { icons } from "@/constants/icons";
 import { fetchMovieDetails, fetchMovieVideo } from "@/services/api";
+import { addSavedMovie, getSavedMovies, removeSavedMovie } from "@/services/appwrite";
 import useFetch from "@/services/usefetch";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
     ActivityIndicator,
-    Alert,
     Image,
     ScrollView,
     Text,
@@ -31,11 +31,12 @@ const MovieInfo = ({ label, value }: MovieInfoProps) => (
 const Details = () => {
 
     const [playing, setPlaying] = useState(false);
+    const [savedMovies, setSavedMovies] = useState<number[]>([]);
 
     const onStateChange = useCallback((state: string) => {
         if (state === "ended") {
             setPlaying(false);
-            Alert.alert("video has finished playing!");
+            // Alert.alert("Video has finished playing!");
         }
     }, []);
 
@@ -50,13 +51,46 @@ const Details = () => {
         fetchMovieDetails(id as string)
     );
 
-    const { data:VideoDetail } = useFetch(() => 
+    const { data: VideoDetail } = useFetch(() => 
         fetchMovieVideo(id as string)
-    ) 
+    );
 
-    // console.log(VideoDetail);
+    // select movie for save
+    const [selectMovie, setMovieSelect] = useState(false);
 
-    const [selectMvoie, setMovieSelect] = useState(false);
+    useEffect(() => {
+      const fetchSaved = async () => {
+        const movies = await getSavedMovies();
+        setSavedMovies(movies);
+      };
+    
+      fetchSaved(); // Only run this once when the component mounts
+    }, []); // Empty dependency array ensures it runs only once
+
+    const handleSaveOrDeleteMovie = async (movieId: number) => {
+        if (selectMovie) {
+            // If the movie is already selected (saved), delete it
+            await removeSavedMovie(movieId);
+    
+            // Remove the movie from the savedMovies state
+            setSavedMovies((prevMovies) => prevMovies.filter((id) => id !== movieId));
+            // Alert.alert("Movie deleted successfully!");
+        } else {
+            // If the movie is not selected, save it
+            await addSavedMovie(movieId);
+    
+            // Update the savedMovies state to reflect the new saved movie
+            setSavedMovies((prevMovies) => [...prevMovies, movieId]);
+            // Alert.alert("Movie saved successfully!");
+        }
+    
+        // Toggle the selectMovie state
+        setMovieSelect((prev) => !prev);
+    };
+
+    // const isSaved = movies
+
+    console.log('Saved Movies:', savedMovies);
 
     if (loading)
         return (
@@ -116,8 +150,12 @@ const Details = () => {
             <View className="flex-col items-start justify-center mt-5 px-5">
                 <View className="flex flex-row w-full justify-between items-center">
                     <Text className="text-white font-bold text-xl">{movie?.title}</Text>
-                    <TouchableOpacity onPress={() => setMovieSelect((prev) => !prev)}>
-                        <Image source={selectMvoie ? icons.mark : icons.unmark} style={selectMvoie? {tintColor: 'yellow' } : {tintColor: 'white'}} className="w-[40px] h-[40px]"/>
+                    <TouchableOpacity onPress={() => handleSaveOrDeleteMovie(Number(id))}>
+                        <Image 
+                            source={selectMovie ? icons.mark : icons.unmark} 
+                            style={selectMovie ? { tintColor: 'yellow' } : { tintColor: 'white' }} 
+                            className="w-[40px] h-[40px]"
+                        />
                     </TouchableOpacity>
                 </View>
                 <View className="flex-row items-center gap-x-1 mt-2">
@@ -160,10 +198,7 @@ const Details = () => {
 
                 <MovieInfo
                     label="Production Companies"
-                    value={
-                    movie?.production_companies?.map((c) => c.name).join(" • ") ||
-                    "N/A"
-                    }
+                    value={movie?.production_companies?.map((c) => c.name).join(" • ") || "N/A"}
                 />
             </View>
         </ScrollView>
